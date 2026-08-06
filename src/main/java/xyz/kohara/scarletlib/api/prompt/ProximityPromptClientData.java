@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.impl.prompt;
+package xyz.kohara.scarletlib.api.prompt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
@@ -12,10 +12,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
-import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
 
 import java.util.UUID;
 
+/**
+ * Pretty much the same as ProximityPrompt object (with a few minor differences), but stored on the client.
+ * @see ProximityPrompt
+ */
 @OnlyIn(Dist.CLIENT)
 public final class ProximityPromptClientData {
 	private final UUID uuid;
@@ -60,6 +63,9 @@ public final class ProximityPromptClientData {
 		this.location = newPos;
 	}
 
+	public boolean isBeingHeld() {
+		return this.holdingTicks > 0;
+	}
 
 	public static ProximityPromptClientData fromPrompt(ProximityPrompt prompt) {
 		boolean dynamic = false;
@@ -148,6 +154,10 @@ public final class ProximityPromptClientData {
 
 	public int holdTimeTicks() {
 		return holdTimeTicks;
+	}
+
+	public boolean isInstantInteract() {
+		return this.holdingTicks == 0;
 	}
 
 	public boolean hasDynamicLocation() {

@@ -11,7 +11,7 @@ import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.prompt.RemoveProximityPromptS2CPacket;
 import xyz.kohara.scarletlib.impl.network.packet.prompt.SyncAllProximityPromptsS2CPacket;
-import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -86,5 +86,13 @@ public class ServerProximityPromptRegistry {
 				.map(ProximityPromptClientData::fromPrompt)
 				.toList();
 		ScarletLibPackets.INSTANCE.sendToPlayer(new SyncAllProximityPromptsS2CPacket(dataList), player);
+	}
+
+	public static void handleInteraction(UUID uuid) {
+		var eventPrompt = PROMPTS.get(uuid);
+		System.out.println("Interacted with prompt!");
+		if (!eventPrompt.isInstantInteract()) {
+			System.out.println("It was a held interaction!");
+		}
 	}
 }

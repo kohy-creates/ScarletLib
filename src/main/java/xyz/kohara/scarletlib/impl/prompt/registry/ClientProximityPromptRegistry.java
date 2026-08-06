@@ -3,9 +3,10 @@ package xyz.kohara.scarletlib.impl.prompt.registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import xyz.kohara.scarletlib.api.util.PlayerUtil;
-import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +40,7 @@ public class ClientProximityPromptRegistry {
 				var entity = promptData.getEntity();
 				if (entity != null) {
 					var pos = entity.position();
-					promptData.updateLocation(pos);
+					promptData.updateLocation(new Vec3(pos.x, pos.y + entity.getBbHeight() / 2f, pos.z));
 				}
 			}
 		}

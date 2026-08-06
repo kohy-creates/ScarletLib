@@ -3,7 +3,7 @@ package xyz.kohara.scarletlib.api.event.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraftforge.eventbus.api.Event;
-import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 
 public class ProximityPromptVisibilityCheckEvent extends Event {
 

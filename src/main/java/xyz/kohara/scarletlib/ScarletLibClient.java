@@ -2,14 +2,17 @@ package xyz.kohara.scarletlib;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 import xyz.kohara.scarletlib.impl.prompt.ProximityPromptRenderer;
 import xyz.kohara.scarletlib.impl.prompt.registry.ClientProximityPromptRegistry;
 
@@ -20,15 +23,29 @@ public class ScarletLibClient {
 
 	@SubscribeEvent // Forge bus
 	public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
+		if (event.getOverlay() != VanillaGuiOverlay.CROSSHAIR.type()) return;
 		if (ACTIVE_PROMPT != null) ProximityPromptRenderer.render(event.getGuiGraphics(), event.getPartialTick());
 	}
 
 	@SubscribeEvent // Forge bus
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.START) {
-			ClientProximityPromptRegistry.updateEntityPromptLocations();
-			ACTIVE_PROMPT = ClientProximityPromptRegistry.getNearestPrompt();
+		if (event.phase != TickEvent.Phase.START) return;
+
+		clientPromptHandler();
+	}
+
+	private static void clientPromptHandler() {
+		ClientProximityPromptRegistry.updateEntityPromptLocations();
+		ACTIVE_PROMPT = ClientProximityPromptRegistry.getNearestPrompt();
+
+		if (ACTIVE_PROMPT != null) {
+
 		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerHandItemSwitch(LivingSwapItemsEvent event) {
+		if (event.getEntity() instanceof LocalPlayer && ACTIVE_PROMPT != null) event.cancel();
 	}
 
 	public static Keybinds keybinds() {
