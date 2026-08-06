@@ -25,7 +25,7 @@ public class ScarletLibAttributes {
 	);
 
 	public static final RegistryObject<Attribute> EXTRA_JUMPS_STRENGTH = ATTRIBUTES.register(
-			"extra_jumps",
+			"extra_jumps_strength",
 			() -> new RangedAttribute("player.extra_jumps_strength", 1d, -2048, 2048d)
 	);
 
