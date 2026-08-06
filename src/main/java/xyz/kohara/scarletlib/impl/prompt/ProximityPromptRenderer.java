@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.prompt;
+package xyz.kohara.scarletlib.impl.prompt;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import xyz.kohara.scarletlib.ScarletLib;
 import xyz.kohara.scarletlib.ScarletLibClient;
-import xyz.kohara.scarletlib.mixin.client.GameRendererAccessor;
+import xyz.kohara.scarletlib.impl.mixin.client.GameRendererAccessor;
 
 import java.util.function.Supplier;
 

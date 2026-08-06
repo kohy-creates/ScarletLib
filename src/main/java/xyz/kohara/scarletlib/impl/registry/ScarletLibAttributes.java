@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.registry;
+package xyz.kohara.scarletlib.impl.registry;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import xyz.kohara.scarletlib.ScarletLibRegistry;
+import xyz.kohara.scarletlib.impl.ScarletLibRegistry;
 
 public class ScarletLibAttributes {
 

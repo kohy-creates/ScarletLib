@@ -1,11 +1,12 @@
-package xyz.kohara.scarletlib;
+package xyz.kohara.scarletlib.impl;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
-import xyz.kohara.scarletlib.registry.ScarletLibAttributes;
-import xyz.kohara.scarletlib.registry.ScarletLibLootModifiers;
+import xyz.kohara.scarletlib.ScarletLib;
+import xyz.kohara.scarletlib.impl.registry.ScarletLibAttributes;
+import xyz.kohara.scarletlib.impl.registry.ScarletLibLootModifiers;
 
 public class ScarletLibRegistry {
 

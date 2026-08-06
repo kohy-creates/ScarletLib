@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.network.packet.prompt;
+package xyz.kohara.scarletlib.impl.network.packet.prompt;
 
 import net.minecraft.network.FriendlyByteBuf;
 import xyz.kohara.scarletlib.api.network.ScarletLibBasePacket;

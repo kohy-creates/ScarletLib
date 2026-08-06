@@ -5,10 +5,13 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -20,8 +23,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import xyz.kohara.scarletlib.api.DelayedTaskScheduler;
 import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
-import xyz.kohara.scarletlib.network.ScarletLibPackets;
-import xyz.kohara.scarletlib.registry.ScarletLibAttributes;
+import xyz.kohara.scarletlib.impl.ScarletLibRegistry;
+import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
+import xyz.kohara.scarletlib.impl.registry.ScarletLibAttributes;
+
+import java.util.Comparator;
 
 @Mod(ScarletLib.MOD_ID)
 public class ScarletLib {
@@ -59,42 +65,42 @@ public class ScarletLib {
 		return ResourceLocation.fromNamespaceAndPath(ScarletLib.MOD_ID, path);
 	}
 
-//	@SubscribeEvent
-//	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-//		if (!(event.getEntity() instanceof ServerPlayer player)) return;
-//
-//		var level = player.serverLevel();
-//		var pos = player.blockPosition();
-//
-//		// 1. Create a Block Prompt at the player's feet getLocation (Instant press)
-//		new ProximityPrompt.Builder("debug_block_prompt")
-//				.setActionText(Component.literal("Inspect Block"))
-//				.setObjectText(Component.literal(level.getBlockState(pos.below()).getBlock().getName().getString()))
-//				.forBlock(level.getBlockState(pos.below()).getBlock(), pos.below(), level)
-//				.interactionRange(5.0D)
-//				.holdTickToProcess(0) // Instant
-//				.build();
-//
-//		// 2. Create an Entity Prompt on the nearest entity within 10 blocks (Hold 20 ticks / 1 second)
-//		Entity nearestEntity = level.getEntities(player, new AABB(pos).inflate(10.0D))
-//				.stream()
-//				.min(Comparator.comparingDouble(e -> e.distanceToSqr(player)))
-//				.orElse(null);
-//
-//		if (nearestEntity != null) {
-//			new ProximityPrompt.Builder("debug_entity_prompt")
-//					.setActionText(Component.literal("Interact With"))
-//					.setObjectText(nearestEntity.getDisplayName())
-//					.forEntity(nearestEntity)
-//					.interactionRange(4.0D)
-//					.holdTickToProcess(20) // 1 second hold
-//					.build();
-//
-//			player.sendSystemMessage(Component.literal("§a[ScarletLib Debug] §fCreated Block Prompt & Entity Prompt on §e" + nearestEntity.getName().getString()));
-//		} else {
-//			player.sendSystemMessage(Component.literal("§a[ScarletLib Debug] §fCreated Block Prompt at feet. (No entity nearby for Entity Prompt)"));
-//		}
-//	}
+	@SubscribeEvent
+	public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+		if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+		var level = player.serverLevel();
+		var pos = player.blockPosition();
+
+		// 1. Create a Block Prompt at the player's feet getLocation (Instant press)
+		new ProximityPrompt.Builder("debug_block_prompt")
+				.setActionText(Component.literal("Inspect Block"))
+				.setObjectText(Component.literal(level.getBlockState(pos.below()).getBlock().getName().getString()))
+				.forBlock(level.getBlockState(pos.below()).getBlock(), pos.below(), level)
+				.interactionRange(5.0D)
+				.holdTickToProcess(0) // Instant
+				.build();
+
+		// 2. Create an Entity Prompt on the nearest entity within 10 blocks (Hold 20 ticks / 1 second)
+		Entity nearestEntity = level.getEntities(player, new AABB(pos).inflate(10.0D))
+				.stream()
+				.min(Comparator.comparingDouble(e -> e.distanceToSqr(player)))
+				.orElse(null);
+
+		if (nearestEntity != null) {
+			new ProximityPrompt.Builder("debug_entity_prompt")
+					.setActionText(Component.literal("Interact With"))
+					.setObjectText(nearestEntity.getDisplayName())
+					.forEntity(nearestEntity)
+					.interactionRange(4.0D)
+					.holdTickToProcess(20) // 1 second hold
+					.build();
+
+			player.sendSystemMessage(Component.literal("§a[ScarletLib Debug] §fCreated Block Prompt & Entity Prompt on §e" + nearestEntity.getName().getString()));
+		} else {
+			player.sendSystemMessage(Component.literal("§a[ScarletLib Debug] §fCreated Block Prompt at feet. (No entity nearby for Entity Prompt)"));
+		}
+	}
 
 	// Register a /testprompt command to spawn prompts wherever you stand on demand
 	@SubscribeEvent

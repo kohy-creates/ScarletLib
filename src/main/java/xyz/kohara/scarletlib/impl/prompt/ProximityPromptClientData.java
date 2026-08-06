@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.prompt;
+package xyz.kohara.scarletlib.impl.prompt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;

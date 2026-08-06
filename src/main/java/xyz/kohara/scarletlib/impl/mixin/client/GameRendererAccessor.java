@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.mixin.client;
+package xyz.kohara.scarletlib.impl.mixin.client;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;

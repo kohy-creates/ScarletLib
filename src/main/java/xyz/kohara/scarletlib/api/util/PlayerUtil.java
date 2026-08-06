@@ -7,8 +7,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import xyz.kohara.scarletlib.network.ScarletLibPackets;
-import xyz.kohara.scarletlib.network.packet.ShowRainbowActionBarMessageS2CPacket;
+import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
+import xyz.kohara.scarletlib.impl.network.packet.ShowRainbowActionBarMessageS2CPacket;
 
 import java.util.Comparator;
 import java.util.List;

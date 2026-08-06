@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "xyz.kohara.scarletlib.mixin",
+  "package": "xyz.kohara.scarletlib.impl.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "ScarletLib.refmap.json",
   "mixins": [

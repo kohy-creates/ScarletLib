@@ -1,10 +1,10 @@
-package xyz.kohara.scarletlib.network;
+package xyz.kohara.scarletlib.impl.network;
 
 import net.minecraftforge.network.NetworkDirection;
 import xyz.kohara.scarletlib.ScarletLib;
 import xyz.kohara.scarletlib.api.network.ScarletLibBaseNetworkHandler;
-import xyz.kohara.scarletlib.network.packet.*;
-import xyz.kohara.scarletlib.network.packet.prompt.*;
+import xyz.kohara.scarletlib.impl.network.packet.*;
+import xyz.kohara.scarletlib.impl.network.packet.prompt.*;
 
 public class ScarletLibPackets extends ScarletLibBaseNetworkHandler {
 

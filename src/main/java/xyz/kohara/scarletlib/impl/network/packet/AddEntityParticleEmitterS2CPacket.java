@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.network.packet;
+package xyz.kohara.scarletlib.impl.network.packet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;

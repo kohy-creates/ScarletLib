@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import xyz.kohara.scarletlib.prompt.registry.ServerProximityPromptRegistry;
+import xyz.kohara.scarletlib.impl.prompt.registry.ServerProximityPromptRegistry;
 
 import java.util.UUID;
 import java.util.function.Supplier;

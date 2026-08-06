@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.registry.lootmodifier;
+package xyz.kohara.scarletlib.impl.registry.lootmodifier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

@@ -1,11 +1,11 @@
-package xyz.kohara.scarletlib.prompt.registry;
+package xyz.kohara.scarletlib.impl.prompt.registry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import xyz.kohara.scarletlib.api.util.PlayerUtil;
-import xyz.kohara.scarletlib.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

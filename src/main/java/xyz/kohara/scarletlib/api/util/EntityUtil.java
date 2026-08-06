@@ -3,8 +3,8 @@ package xyz.kohara.scarletlib.api.util;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import xyz.kohara.scarletlib.network.ScarletLibPackets;
-import xyz.kohara.scarletlib.network.packet.AddEntityParticleEmitterS2CPacket;
+import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
+import xyz.kohara.scarletlib.impl.network.packet.AddEntityParticleEmitterS2CPacket;
 
 public class EntityUtil {
 

@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.prompt.registry;
+package xyz.kohara.scarletlib.impl.prompt.registry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,10 +8,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.scarletlib.ScarletLib;
 import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
-import xyz.kohara.scarletlib.network.ScarletLibPackets;
-import xyz.kohara.scarletlib.network.packet.prompt.RemoveProximityPromptS2CPacket;
-import xyz.kohara.scarletlib.network.packet.prompt.SyncAllProximityPromptsS2CPacket;
-import xyz.kohara.scarletlib.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
+import xyz.kohara.scarletlib.impl.network.packet.prompt.RemoveProximityPromptS2CPacket;
+import xyz.kohara.scarletlib.impl.network.packet.prompt.SyncAllProximityPromptsS2CPacket;
+import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

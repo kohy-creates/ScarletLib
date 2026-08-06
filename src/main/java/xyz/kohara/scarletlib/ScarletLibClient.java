@@ -2,7 +2,6 @@ package xyz.kohara.scarletlib;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -10,9 +9,9 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import xyz.kohara.scarletlib.prompt.ProximityPromptClientData;
-import xyz.kohara.scarletlib.prompt.ProximityPromptRenderer;
-import xyz.kohara.scarletlib.prompt.registry.ClientProximityPromptRegistry;
+import xyz.kohara.scarletlib.impl.prompt.ProximityPromptClientData;
+import xyz.kohara.scarletlib.impl.prompt.ProximityPromptRenderer;
+import xyz.kohara.scarletlib.impl.prompt.registry.ClientProximityPromptRegistry;
 
 @OnlyIn(Dist.CLIENT)
 public class ScarletLibClient {
