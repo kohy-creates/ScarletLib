@@ -11,7 +11,7 @@ import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
 import xyz.kohara.scarletlib.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.network.packet.prompt.RemoveProximityPromptS2CPacket;
 import xyz.kohara.scarletlib.network.packet.prompt.SyncAllProximityPromptsS2CPacket;
-import xyz.kohara.scarletlib.prompt.ProximityPromptData;
+import xyz.kohara.scarletlib.prompt.ProximityPromptClientData;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -75,15 +75,15 @@ public class ServerProximityPromptRegistry {
 	}
 
 	private static void syncToAllClients() {
-		List<ProximityPromptData> dataList = PROMPTS.values().stream()
-				.map(ProximityPromptData::fromPrompt)
+		List<ProximityPromptClientData> dataList = PROMPTS.values().stream()
+				.map(ProximityPromptClientData::fromPrompt)
 				.toList();
 		ScarletLibPackets.INSTANCE.sendToAllPlayers(new SyncAllProximityPromptsS2CPacket(dataList));
 	}
 
 	private static void syncToPlayer(ServerPlayer player) {
-		List<ProximityPromptData> dataList = PROMPTS.values().stream()
-				.map(ProximityPromptData::fromPrompt)
+		List<ProximityPromptClientData> dataList = PROMPTS.values().stream()
+				.map(ProximityPromptClientData::fromPrompt)
 				.toList();
 		ScarletLibPackets.INSTANCE.sendToPlayer(new SyncAllProximityPromptsS2CPacket(dataList), player);
 	}

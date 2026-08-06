@@ -12,9 +12,16 @@ public abstract class ScarletLibBasePacket {
 
 	protected abstract void toBytes(FriendlyByteBuf buf);
 
+	/**
+	 * Logic executed for S2C packets when received on the client.
+	 */
 	protected void handleOnClient() {
 	}
 
+	/**
+	 * Logic executed for C2S packets when received on the server,
+	 * @param player Player (ServerPlayer) that sent the packet.
+	 */
 	protected void handleOnServer(ServerPlayer player) {
 	}
 

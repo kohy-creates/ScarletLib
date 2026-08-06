@@ -14,13 +14,12 @@ public class ScarletLibPackets extends ScarletLibBaseNetworkHandler {
 		super(ScarletLib.MOD_ID);
 	}
 
-	public void register() {
+	@Override
+	public void registerPackets() {
 		registerPacket(AddEntityParticleEmitterS2CPacket.class, AddEntityParticleEmitterS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 		registerPacket(SyncAllProximityPromptsS2CPacket.class, SyncAllProximityPromptsS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 		registerPacket(InteractWithProximityPromptC2SPacket.class, InteractWithProximityPromptC2SPacket::new, NetworkDirection.PLAY_TO_SERVER);
 		registerPacket(RemoveProximityPromptS2CPacket.class, RemoveProximityPromptS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 		registerPacket(ShowRainbowActionBarMessageS2CPacket.class, ShowRainbowActionBarMessageS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-		registerPacket(UpdateProximityPromptLocationS2CPacket.class, UpdateProximityPromptLocationS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
-		registerPacket(UpdatePromptVisibilityS2CPacket.class, UpdatePromptVisibilityS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 	}
 }
