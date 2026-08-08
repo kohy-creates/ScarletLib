@@ -6,7 +6,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.Packet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.kohara.scarletlib.impl.prompt.PromptClientHandler;
+import xyz.kohara.scarletlib.impl.client.prompt.PromptClientHandler;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {

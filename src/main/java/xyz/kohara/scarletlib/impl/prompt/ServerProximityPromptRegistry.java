@@ -1,7 +1,6 @@
-package xyz.kohara.scarletlib.impl.prompt.registry;
+package xyz.kohara.scarletlib.impl.prompt;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;

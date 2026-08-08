@@ -4,7 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import xyz.kohara.scarletlib.api.network.ScarletLibBasePacket;
 import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
-import xyz.kohara.scarletlib.impl.prompt.registry.ServerProximityPromptRegistry;
+import xyz.kohara.scarletlib.impl.prompt.ServerProximityPromptRegistry;
 
 import java.util.UUID;
 

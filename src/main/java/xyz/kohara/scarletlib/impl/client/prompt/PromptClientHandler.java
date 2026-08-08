@@ -1,8 +1,5 @@
-package xyz.kohara.scarletlib.impl.prompt;
+package xyz.kohara.scarletlib.impl.client.prompt;
 
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.screens.controls.KeyBindsList;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -10,7 +7,6 @@ import xyz.kohara.scarletlib.ScarletLibClient;
 import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.prompt.InteractWithProximityPromptC2SPacket;
-import xyz.kohara.scarletlib.impl.prompt.registry.ClientProximityPromptRegistry;
 
 public class PromptClientHandler {
 

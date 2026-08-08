@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "ScarletLib.refmap.json",
   "mixins": [
+    "EntityAccessor"
   ],
   "client": [
     "client.GameRendererAccessor",

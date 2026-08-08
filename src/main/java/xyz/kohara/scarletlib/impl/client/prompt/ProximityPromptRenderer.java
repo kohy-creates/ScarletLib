@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.impl.prompt;
+package xyz.kohara.scarletlib.impl.client.prompt;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;

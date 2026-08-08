@@ -7,15 +7,26 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.scarletlib.api.event.client.ProximityPromptVisibilityCheckEvent;
-import xyz.kohara.scarletlib.impl.prompt.PromptClientHandler;
+import xyz.kohara.scarletlib.impl.client.EntityRenderCheck;
+import xyz.kohara.scarletlib.impl.client.prompt.PromptClientHandler;
 
 import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ScarletLibClient {
+
+	public static void clientSetup(IEventBus modBus) {
+		MinecraftForge.EVENT_BUS.register(ScarletLibClient.class);
+		MinecraftForge.EVENT_BUS.register(PromptClientHandler.class);
+		MinecraftForge.EVENT_BUS.register(EntityRenderCheck.class);
+
+		modBus.register(ScarletLibClient.Keybinds.class);
+	}
 
 	@SubscribeEvent // Forge bus
 	public static void onClientTick(TickEvent.ClientTickEvent event) {

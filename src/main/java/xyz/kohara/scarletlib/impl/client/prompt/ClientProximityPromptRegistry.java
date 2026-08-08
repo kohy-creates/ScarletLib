@@ -1,4 +1,4 @@
-package xyz.kohara.scarletlib.impl.prompt.registry;
+package xyz.kohara.scarletlib.impl.client.prompt;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;

@@ -3,7 +3,7 @@ package xyz.kohara.scarletlib.impl.network.packet.prompt;
 import net.minecraft.network.FriendlyByteBuf;
 import xyz.kohara.scarletlib.api.network.ScarletLibBasePacket;
 import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
-import xyz.kohara.scarletlib.impl.prompt.registry.ClientProximityPromptRegistry;
+import xyz.kohara.scarletlib.impl.client.prompt.ClientProximityPromptRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

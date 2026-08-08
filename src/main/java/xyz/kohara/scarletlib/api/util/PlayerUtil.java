@@ -13,11 +13,7 @@ import xyz.kohara.scarletlib.impl.network.packet.ShowRainbowActionBarMessageS2CP
 import java.util.Comparator;
 import java.util.List;
 
-public class PlayerUtil {
-
-	public static boolean isStandingStill(Player player) {
-		return EntityUtil.isStandingStill(player);
-	}
+public class PlayerUtil extends EntityUtil {
 
 	/**
 	 * Sends a rainbow action bar message (e.g. like the ones sent when a Music Disc is inserted into a Jukebox)
@@ -42,8 +38,17 @@ public class PlayerUtil {
 	}
 
 	/**
-	 * Returns all players in a radius around a getLocation
-	 * @param location Center getLocation
+	 * Returns all players in a radius around a given entity
+	 * @param entity Target entity
+	 * @param radius Radius in blocks
+	 */
+	public static List<Player> getPlayersInRadius(Entity entity, double radius) {
+		return getPlayersInRadius(entity.level(), entity.position(), radius);
+	}
+
+	/**
+	 * Returns all players in a radius around a location
+	 * @param location Center location as a vector
 	 * @param radius Radius in blocks
 	 */
 	public static List<Player> getPlayersInRadius(Level level, Vec3 location, double radius) {
@@ -77,5 +82,9 @@ public class PlayerUtil {
 				.stream()
 				.min(Comparator.comparingDouble(p -> p.distanceToSqr(location)))
 				.orElse(null);
+	}
+
+	public static void performDash(Player player, double distance, boolean invertDirection, boolean isOmnidirectional, boolean ignoreDownwardAngleOnGround) {
+
 	}
 }

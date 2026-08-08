@@ -21,5 +21,6 @@ public class ScarletLibPackets extends ScarletLibBaseNetworkHandler {
 		registerPacket(InteractWithProximityPromptC2SPacket.class, InteractWithProximityPromptC2SPacket::new, NetworkDirection.PLAY_TO_SERVER);
 		registerPacket(RemoveProximityPromptS2CPacket.class, RemoveProximityPromptS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 		registerPacket(ShowRainbowActionBarMessageS2CPacket.class, ShowRainbowActionBarMessageS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+		registerPacket(EntityRenderPacket.class, EntityRenderPacket::new, NetworkDirection.PLAY_TO_CLIENT);
 	}
 }
