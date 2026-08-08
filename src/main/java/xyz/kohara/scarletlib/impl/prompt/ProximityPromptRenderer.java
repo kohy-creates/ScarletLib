@@ -19,22 +19,89 @@ public class ProximityPromptRenderer {
 
 	private static final ResourceLocation BACKGROUND_TEXTURE = ScarletLib.of("textures/gui/prompt/background.png");
 	private static final ResourceLocation KEY_BUTTON_TEXTURE = ScarletLib.of("textures/gui/prompt/button.png");
-	private static final ResourceLocation KEY_PRESSED_BUTTON_TEXTURE = ScarletLib.of("textures/gui/prompt/button.png");
+	private static final ResourceLocation KEY_PRESSED_BUTTON_TEXTURE = ScarletLib.of("textures/gui/prompt/button_pressed.png");
+
+	private static final long ANIMATION_DURATION_MS = 120L;
+	private static final float MIN_SCALE = 0.70f;
+	private static ProximityPromptClientData displayedPrompt = null;
+	private static Vec3 displayedLocation = null;
+	private static long animationStartTime = 0L;
+	private static boolean animatingIn = false;
+	private static boolean animatingOut = false;
+	private static float animationProgress = 1.0f;
 
 	public static void render(GuiGraphics guiGraphics, float partialTicks) {
-		LocalPlayer player = Minecraft.getInstance().player;
-		if (player == null || Minecraft.getInstance().screen != null) return;
+		Minecraft mc = Minecraft.getInstance();
+		LocalPlayer player = mc.player;
+		if (player == null) {
+			return;
+		}
 
-		Vec2 screenPos = projectToScreen(ScarletLibClient.ACTIVE_PROMPT.getLocation(), partialTicks);
-		if (Float.isNaN(screenPos.x) || Float.isNaN(screenPos.y)) return;
+		ProximityPromptClientData activePrompt = PromptClientHandler.ACTIVE_PROMPT;
+		if (activePrompt != null) {
+			if (displayedPrompt == null || !displayedPrompt.getUuid().equals(activePrompt.getUuid())) {
+				displayedPrompt = activePrompt;
+				displayedLocation = activePrompt.getLocation();
+				startAnimation(true);
+			} else {
+				displayedLocation = activePrompt.getLocation();
+			}
+		}
+
+		if (activePrompt == null && displayedPrompt != null && !animatingOut) {
+			startAnimation(false);
+		}
+
+		if (displayedPrompt == null || displayedLocation == null) {
+			return;
+		}
+
+		updateAnimation();
+
+		Vec2 screenPos = projectToScreen(displayedLocation, partialTicks);
+		if (Float.isNaN(screenPos.x) || Float.isNaN(screenPos.y)) {
+			return;
+		}
 
 		int x = (guiGraphics.guiWidth() / 2) + (int) screenPos.x;
 		int y = (guiGraphics.guiHeight() / 2) + (int) screenPos.y;
+		renderPromptUI(guiGraphics, x, y, displayedPrompt, animationProgress);
 
-		renderPromptUI(guiGraphics, x, y, ScarletLibClient.ACTIVE_PROMPT);
+		if (animatingOut && animationProgress <= 0.0f) {
+			displayedPrompt = null;
+			displayedLocation = null;
+			animatingOut = false;
+		}
 	}
 
-	private static void renderPromptUI(GuiGraphics graphics, int x, int y, ProximityPromptClientData prompt) {
+	private static void startAnimation(boolean entering) {
+		animationStartTime = System.currentTimeMillis();
+		animatingIn = entering;
+		animatingOut = !entering;
+		if (entering) {
+			animationProgress = 0.0f;
+		} else {
+			animationProgress = 1.0f;
+		}
+	}
+
+	private static void updateAnimation() {
+		long elapsed = System.currentTimeMillis() - animationStartTime;
+		float progress = Math.min(1.0f, (float) elapsed / ANIMATION_DURATION_MS);
+		float easedProgress = 1.0f - (float) Math.pow(1.0f - progress, 3);
+		if (animatingIn) {
+			animationProgress = easedProgress;
+		} else if (animatingOut) {
+			animationProgress = 1.0f - easedProgress;
+		}
+	}
+
+	private static void renderPromptUI(
+			GuiGraphics graphics,
+			int x, int y,
+			ProximityPromptClientData prompt,
+			float animationProgress
+	) {
 		Minecraft mc = Minecraft.getInstance();
 		Font font = mc.font;
 
@@ -57,31 +124,50 @@ public class ProximityPromptRenderer {
 		int boxWidth = contentWidth + (padding * 2);
 		int boxHeight = contentHeight + (padding * 2);
 
-		int drawX = x - (boxWidth / 2);
-		int drawY = y - (boxHeight / 2);
+		float scale = MIN_SCALE + ((1.0f - MIN_SCALE) * animationProgress);
+		int alpha = (int) (255.0f * animationProgress);
 
-		graphics.blitNineSlicedSized(BACKGROUND_TEXTURE, drawX, drawY, boxWidth, boxHeight, 3, 9, 9, 0, 0, 9, 9);
+		alpha = Math.max(0, Math.min(255, alpha));
+
+		graphics.pose().pushPose();
+		graphics.pose().translate(x, y, 0);
+		graphics.pose().scale(scale, scale, 1.0f);
+		graphics.pose().translate(-boxWidth / 2.0f, -boxHeight / 2.0f, 0);
+
+		float alphaFloat = alpha / 255.0f;
+		graphics.setColor(1.0f, 1.0f, 1.0f, alphaFloat);
+
+		graphics.blitNineSlicedSized(BACKGROUND_TEXTURE, 0, 0, boxWidth, boxHeight, 3, 9, 9, 0, 0, 9, 9);
 
 		if (prompt.holdingTicks > 0 && prompt.holdTimeTicks() > 0) {
 			float progressFactor = Math.min(1.0f, (float) prompt.holdingTicks / prompt.holdTimeTicks());
 			int progressBarWidth = (int) ((boxWidth - 6) * progressFactor);
-			graphics.fill(drawX, drawY + boxHeight - 3, drawX + progressBarWidth, drawY + boxHeight, 0xFF55FF55);
+			int progressColor = (alpha << 24) | 0x55FF55;
+			graphics.fill(2, boxHeight - 4, 3 + progressBarWidth, boxHeight - 2, progressColor);
 		}
 
-		int keyX = drawX + padding;
-		int keyY = drawY + padding + ((contentHeight - keyBoxSize) / 2);
-		graphics.blit((prompt.isBeingHeld()) ? KEY_PRESSED_BUTTON_TEXTURE : KEY_BUTTON_TEXTURE, keyX, keyY, 0, 0, keyBoxSize, keyBoxSize, 16, 16);
+		var keyY = padding + ((contentHeight - keyBoxSize) / 2);
+		graphics.blit(
+				prompt.isBeingHeld() ? KEY_PRESSED_BUTTON_TEXTURE : KEY_BUTTON_TEXTURE,
+				padding, keyY,
+				0, 0,
+				keyBoxSize, keyBoxSize,
+				16, 16
+		);
 
-		int keyTextX = keyX + (keyBoxSize - keyWidth) / 2;
-		int keyTextY = keyY + (keyBoxSize - font.lineHeight) / 2 + 1 - (((prompt.isBeingHeld()) ? 5 : 0));
-		graphics.drawString(font, keyText, keyTextX, keyTextY, 0xFFFFFF, true);
+		int white = (alpha << 24) | 0xFFFFFF;
 
-		int textX = keyX + keyBoxSize + spacing;
-		int textY = drawY + padding;
+		int keyTextX = padding + (keyBoxSize - keyWidth) / 2;
+		int keyTextY = keyY + (keyBoxSize - font.lineHeight) / 2 + (prompt.isBeingHeld() ? 2 : 1);
 
-		graphics.drawString(font, objectText, textX, textY, 0xAAAAAA, true);
+		graphics.drawString(font, keyText, keyTextX, keyTextY, white, true);
 
-		graphics.drawString(font, actionText, textX, textY + font.lineHeight + 2, 0xFFFFFF, true);
+		int textX = padding + keyBoxSize + spacing;
+
+		graphics.drawString(font, objectText, textX, padding, (alpha << 24) | 0xAAAAAA, true);
+		graphics.drawString(font, actionText, textX, padding + font.lineHeight + 2, white, true);
+		graphics.pose().popPose();
+		graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	private static Vec2 projectToScreen(Vec3 worldPos, float partialTicks) {

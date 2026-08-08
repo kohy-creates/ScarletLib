@@ -4,7 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
+import xyz.kohara.scarletlib.api.event.client.ProximityPromptVisibilityCheckEvent;
 import xyz.kohara.scarletlib.api.util.PlayerUtil;
 import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
 
@@ -31,9 +33,12 @@ public class ClientProximityPromptRegistry {
 	}
 
 	public static void updateEntityPromptLocations() {
+		var player = MC.player;
+		if (player == null) return;
+		var level = MC.player.level();
 		for (var promptData : CLIENT_PROMPTS.values()
 				.stream()
-				.filter(data -> data.getDimension() == MC.player.level().dimension())
+				.filter(data -> data.getDimension() == level.dimension())
 				.toList()
 		) {
 			if (promptData.hasDynamicLocation()) {
@@ -59,14 +64,16 @@ public class ClientProximityPromptRegistry {
 
 	/**
 	 * Returns prompts that match the player's getDimension and can be seen
-	 * (distance to them is smaller than max interaction range)
+	 * (distance to them is smaller than max interaction range + passes the visibility event)
 	 */
 	public static List<ProximityPromptClientData> getNearbyVisiblePrompts() {
 		var player = MC.player;
 		final List<ProximityPromptClientData> prompts = new ArrayList<>();
 		for (var promptData : getPromptsForCurrentDimension()) {
 			if (promptData.getLocation().closerThan(player.position(), promptData.getMaxDistance())) {
-				prompts.add(promptData);
+				var eventHandler = new ProximityPromptVisibilityCheckEvent(promptData);
+				MinecraftForge.EVENT_BUS.post(eventHandler);
+				if (eventHandler.canBeSeen()) prompts.add(promptData);
 			}
 		}
 		return prompts;

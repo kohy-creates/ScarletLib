@@ -2,50 +2,26 @@ package xyz.kohara.scarletlib;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingSwapItemsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import xyz.kohara.scarletlib.api.prompt.ProximityPromptClientData;
-import xyz.kohara.scarletlib.impl.prompt.ProximityPromptRenderer;
-import xyz.kohara.scarletlib.impl.prompt.registry.ClientProximityPromptRegistry;
+import xyz.kohara.scarletlib.api.event.client.ProximityPromptVisibilityCheckEvent;
+import xyz.kohara.scarletlib.impl.prompt.PromptClientHandler;
+
+import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ScarletLibClient {
-
-	public static ProximityPromptClientData ACTIVE_PROMPT = null;
-
-	@SubscribeEvent // Forge bus
-	public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
-		if (event.getOverlay() != VanillaGuiOverlay.CROSSHAIR.type()) return;
-		if (ACTIVE_PROMPT != null) ProximityPromptRenderer.render(event.getGuiGraphics(), event.getPartialTick());
-	}
 
 	@SubscribeEvent // Forge bus
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase != TickEvent.Phase.START) return;
 
-		clientPromptHandler();
-	}
-
-	private static void clientPromptHandler() {
-		ClientProximityPromptRegistry.updateEntityPromptLocations();
-		ACTIVE_PROMPT = ClientProximityPromptRegistry.getNearestPrompt();
-
-		if (ACTIVE_PROMPT != null) {
-
-		}
-	}
-
-	@SubscribeEvent
-	public static void onPlayerHandItemSwitch(LivingSwapItemsEvent event) {
-		if (event.getEntity() instanceof LocalPlayer && ACTIVE_PROMPT != null) event.cancel();
+		PromptClientHandler.clientPromptHandler();
 	}
 
 	public static Keybinds keybinds() {
@@ -71,6 +47,17 @@ public class ScarletLibClient {
 		@SubscribeEvent // Mod bus
 		public static void register(RegisterKeyMappingsEvent event) {
 			event.register(INSTANCE.INTERACT_WITH_PROMPT);
+		}
+	}
+
+	@SubscribeEvent
+	public static void promptVisibilityTest(ProximityPromptVisibilityCheckEvent event) {
+		var player = event.getPlayer();
+		var prompt = event.getPromptData();
+		if (Objects.equals(prompt.getId(), "command_prompt")) {
+			if (!player.isHolding(Items.NETHERITE_SWORD)) {
+				event.hidePrompt();
+			}
 		}
 	}
 }

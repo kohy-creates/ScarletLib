@@ -28,6 +28,6 @@ public class InteractWithProximityPromptC2SPacket extends ScarletLibBasePacket {
 	@Override
 	public void handleOnServer(ServerPlayer player) {
 		super.handleOnServer(player);
-		ServerProximityPromptRegistry.handleInteraction(this.uuid);
+		ServerProximityPromptRegistry.handleInteraction(this.uuid, player);
 	}
 }

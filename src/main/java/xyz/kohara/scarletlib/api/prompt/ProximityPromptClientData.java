@@ -16,7 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 /**
- * Pretty much the same as ProximityPrompt object (with a few minor differences), but stored on the client.
+ * Essentially a copy of a Proximity Prompt, but stored on the client.
+ * From the client, you cannot directly interact with the prompt, only its data.
+ *
  * @see ProximityPrompt
  */
 @OnlyIn(Dist.CLIENT)
@@ -59,6 +61,9 @@ public final class ProximityPromptClientData {
 		this.boundEntityId = boundEntityId;
 	}
 
+	/**
+	 * Manually messing with the client prompt's location is NOT recommended.
+	 */
 	public void updateLocation(Vec3 newPos) {
 		this.location = newPos;
 	}
@@ -157,7 +162,7 @@ public final class ProximityPromptClientData {
 	}
 
 	public boolean isInstantInteract() {
-		return this.holdingTicks == 0;
+		return this.holdTimeTicks == 0;
 	}
 
 	public boolean hasDynamicLocation() {

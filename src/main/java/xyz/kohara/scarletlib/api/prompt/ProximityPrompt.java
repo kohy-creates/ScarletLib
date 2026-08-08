@@ -18,7 +18,7 @@ public class ProximityPrompt {
 	private final String id;
 	private final Component actionText;
 	private final Component objectText;
-	private final Pair<Supplier<Vec3>, Level> location;
+	private final Pair<Vec3, Level> location;
 	private final double maxDistance;
 	private final int holdTimeTicks;
 	private final UUID uuid;
@@ -54,7 +54,7 @@ public class ProximityPrompt {
 	}
 
 	public Vec3 getLocation() {
-		return this.location.getFirst().get();
+		return this.location.getFirst();
 	}
 
 	public Level getLevel() {
@@ -109,12 +109,27 @@ public class ProximityPrompt {
 		return this.entity == null && this.block == null;
 	}
 
+	public Builder recreate() {
+		var builder = new ProximityPrompt.Builder(this.id);
+
+		builder.actionText = this.actionText;
+		builder.objectText = this.objectText;
+		builder.location = Pair.of(this.location.getFirst(), this.location.getSecond());
+		builder.maxDistance = this.maxDistance;
+		builder.holdTimeTicks = this.holdTimeTicks;
+
+		builder.entity = this.entity;
+		builder.block = this.block;
+
+		return builder;
+	}
+
 	public static class Builder {
 
 		public String id;
 		public Component actionText;
 		public Component objectText;
-		public Pair<Supplier<Vec3>, Level> location = null;
+		public Pair<Vec3, Level> location = null;
 		public double maxDistance = 3d;
 		public int holdTimeTicks = 0;
 		public Integer entity = null;
@@ -194,7 +209,7 @@ public class ProximityPrompt {
 		 * @param level Target level. Has to be a level object.
 		 */
 		public Builder forLocation(Vec3 loc, Level level) {
-			this.location = Pair.of(() -> loc, level);
+			this.location = Pair.of(loc, level);
 			return this;
 		}
 
@@ -208,7 +223,7 @@ public class ProximityPrompt {
 		 * @param level Target level. Has to be a level object.
 		 */
 		public Builder forBlock(Block block, BlockPos pos, Level level) {
-			this.location = Pair.of(() -> pos.getCenter(), level);
+			this.location = Pair.of(pos.getCenter(), level);
 			this.block = block;
 			return this;
 		}
@@ -223,7 +238,7 @@ public class ProximityPrompt {
 		 * @param entity Target entity.
 		 */
 		public Builder forEntity(Entity entity) {
-			this.location = Pair.of(() -> entity.position(), entity.level());
+			this.location = Pair.of(entity.position(), entity.level());
 			this.entity = entity.getId();
 			return this;
 		}

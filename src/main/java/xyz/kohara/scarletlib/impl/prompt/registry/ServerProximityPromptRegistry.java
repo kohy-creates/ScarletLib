@@ -1,12 +1,15 @@
 package xyz.kohara.scarletlib.impl.prompt.registry;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.kohara.scarletlib.ScarletLib;
+import xyz.kohara.scarletlib.api.event.ProximityPromptInteractEvent;
 import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.prompt.RemoveProximityPromptS2CPacket;
@@ -88,11 +91,11 @@ public class ServerProximityPromptRegistry {
 		ScarletLibPackets.INSTANCE.sendToPlayer(new SyncAllProximityPromptsS2CPacket(dataList), player);
 	}
 
-	public static void handleInteraction(UUID uuid) {
+	public static void handleInteraction(UUID uuid, ServerPlayer player) {
 		var eventPrompt = PROMPTS.get(uuid);
-		System.out.println("Interacted with prompt!");
-		if (!eventPrompt.isInstantInteract()) {
-			System.out.println("It was a held interaction!");
-		}
+		var eventHandler = new ProximityPromptInteractEvent(eventPrompt, player, player.serverLevel());
+		MinecraftForge.EVENT_BUS.post(eventHandler);
+		if (eventHandler.isCanceled()) return;
+		unregister(eventPrompt);
 	}
 }

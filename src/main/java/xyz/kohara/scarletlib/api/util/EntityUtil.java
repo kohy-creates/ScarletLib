@@ -5,12 +5,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.AddEntityParticleEmitterS2CPacket;
+import xyz.kohara.scarletlib.impl.prompt.registry.ServerProximityPromptRegistry;
 
 public class EntityUtil {
 
 	/**
 	 * Checks if the entity is standing still or moving.
-	 * @param entity The entity to check.
 	 */
 	public static boolean isStandingStill(Entity entity) {
 		var delta = entity.getDeltaMovement();
@@ -29,5 +29,17 @@ public class EntityUtil {
 	 */
 	public static void addParticleEmitter(Entity entity, ParticleOptions particleOptions, ServerPlayer player) {
 		ScarletLibPackets.INSTANCE.sendToPlayer(new AddEntityParticleEmitterS2CPacket(entity, particleOptions), player);
+	}
+
+	/**
+	 * Checks if an entity has a Proximity Prompt with a specific ID attached to itself.
+	 * Server-side only.
+	 */
+	public static boolean hasAProximityPromptAttached(Entity entity, String id) {
+		return ServerProximityPromptRegistry.getAllPrompts().stream()
+				.anyMatch(proximityPrompt -> proximityPrompt.getId().equals(id)
+						&& proximityPrompt.isBoundToEntity()
+						&& proximityPrompt.getEntity() == entity.getId()
+				);
 	}
 }
