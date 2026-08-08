@@ -2,7 +2,6 @@ package xyz.kohara.scarletlib;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -11,11 +10,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import xyz.kohara.scarletlib.api.event.client.ProximityPromptVisibilityCheckEvent;
 import xyz.kohara.scarletlib.impl.client.EntityRenderCheck;
 import xyz.kohara.scarletlib.impl.client.prompt.PromptClientHandler;
-
-import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ScarletLibClient {
@@ -58,17 +54,6 @@ public class ScarletLibClient {
 		@SubscribeEvent // Mod bus
 		public static void register(RegisterKeyMappingsEvent event) {
 			event.register(INSTANCE.INTERACT_WITH_PROMPT);
-		}
-	}
-
-	@SubscribeEvent
-	public static void promptVisibilityTest(ProximityPromptVisibilityCheckEvent event) {
-		var player = event.getPlayer();
-		var prompt = event.getPromptData();
-		if (Objects.equals(prompt.getId(), "command_prompt")) {
-			if (!player.isHolding(Items.NETHERITE_SWORD)) {
-				event.hidePrompt();
-			}
 		}
 	}
 }
