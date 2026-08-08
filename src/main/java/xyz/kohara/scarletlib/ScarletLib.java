@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import xyz.kohara.scarletlib.api.DelayedTaskScheduler;
+import xyz.kohara.scarletlib.api.ScarletLibScheduler;
 import xyz.kohara.scarletlib.impl.ScarletLibRegistry;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.prompt.PromptClientHandler;
@@ -29,7 +29,7 @@ public class ScarletLib {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(ScarletLibAttributes.class);
-		MinecraftForge.EVENT_BUS.register(DelayedTaskScheduler.class);
+		MinecraftForge.EVENT_BUS.register(ScarletLibScheduler.class);
 
 //		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 

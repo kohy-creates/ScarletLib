@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
-import xyz.kohara.scarletlib.api.DelayedTaskScheduler;
+import xyz.kohara.scarletlib.api.ScarletLibScheduler;
 import xyz.kohara.scarletlib.api.prompt.ProximityPrompt;
 
 /**
@@ -43,7 +43,7 @@ public class ProximityPromptInteractEvent extends Event {
 	 */
 	public void respawnEventPrompt() {
 		var builder = this.prompt.recreate();
-		DelayedTaskScheduler.schedule(builder::build, 1);
+		ScarletLibScheduler.schedule(builder::build, 1);
 	}
 }
 

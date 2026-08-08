@@ -12,7 +12,7 @@ import java.util.Map;
  * Shared delayed task scheduler that executes a task on the server after a specified amount of ticks.
  * Tasks are executed in the END phase of the tick.
  */
-public class DelayedTaskScheduler {
+public class ScarletLibScheduler {
 	private static final Map<Integer, List<Runnable>> TASKS = new HashMap<>();
 	private static int tickCount = 0;
 
