@@ -1,11 +1,14 @@
 package xyz.kohara.scarletlib.api.util;
 
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import xyz.kohara.scarletlib.api.ScarletLibScheduler;
 import xyz.kohara.scarletlib.api.dash.Dash;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 public class EntityUtil {
 
@@ -47,6 +51,42 @@ public class EntityUtil {
 		ScarletLibPackets.INSTANCE.sendToPlayer(new AddEntityParticleEmitterS2CPacket(entity, particleOptions), player);
 	}
 
+	public static List<Entity> getEntitiesInRadius(Level level, Vec3 location, double radius) {
+		AABB box = new AABB(
+				location.x - radius, location.y - radius, location.z - radius,
+				location.x + radius, location.y + radius, location.z + radius
+		);
+
+		List<Entity> entities = level.getEntitiesOfClass(Entity.class, box);
+		entities.removeIf(p -> p.distanceToSqr(location.x + 0.5, location.y + 0.5, location.z + 0.5) > radius * radius);
+		return entities;
+	}
+
+	public static List<Entity> getEntitiesInRadius(Level level, Vec3 location, double radius, Predicate<? super Entity> pFilter) {
+		var entities = getEntitiesInRadius(level, location, radius);
+		entities.removeIf(pFilter.negate());
+		return entities;
+	}
+
+	public static List<Entity> getEntitiesInRadius(Entity entity, double radius) {
+		var location = entity.position();
+
+		AABB box = new AABB(
+				location.x - radius, location.y - radius, location.z - radius,
+				location.x + radius, location.y + radius, location.z + radius
+		);
+
+		List<Entity> entities = entity.level().getEntitiesOfClass(Entity.class, box);
+		entities.removeIf(p -> p.distanceToSqr(location.x + 0.5, location.y + 0.5, location.z + 0.5) > radius * radius);
+		return entities;
+	}
+
+	public static List<Entity> getEntitiesInRadius(Entity entity, double radius, Predicate<? super Entity> pFilter) {
+		var entities = getEntitiesInRadius(entity.level(), entity.position(), radius);
+		entities.removeIf(pFilter.negate());
+		return entities;
+	}
+
 	/**
 	 * Checks if an entity has a Proximity Prompt with a specific ID attached to itself.
 	 * Server-side only.
@@ -59,6 +99,20 @@ public class EntityUtil {
 						&& proximityPrompt.isBoundToEntity()
 						&& proximityPrompt.getEntity() == entity.getId()
 				);
+	}
+
+	/**
+	 * Removes a Proximity prompt with specified ID from an entity.
+	 */
+	public static void removePromptFromEntity(Entity entity, String id) {
+		if (hasAProximityPromptAttached(entity, id)) {
+			ServerProximityPromptRegistry.getAllPrompts().stream()
+					.filter(proximityPrompt -> proximityPrompt.getId().equals(id)
+							&& proximityPrompt.isBoundToEntity()
+							&& proximityPrompt.getEntity() == entity.getId()
+					)
+					.toList().forEach(ServerProximityPromptRegistry::unregister);
+		}
 	}
 
 	/**
