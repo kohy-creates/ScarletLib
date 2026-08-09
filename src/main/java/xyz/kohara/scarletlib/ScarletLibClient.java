@@ -11,6 +11,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import xyz.kohara.scarletlib.impl.client.EntityRenderCheck;
+import xyz.kohara.scarletlib.impl.client.LockMovement;
+import xyz.kohara.scarletlib.impl.client.SmoothTeleport;
 import xyz.kohara.scarletlib.impl.client.prompt.PromptClientHandler;
 
 @OnlyIn(Dist.CLIENT)
@@ -20,6 +22,8 @@ public class ScarletLibClient {
 		MinecraftForge.EVENT_BUS.register(ScarletLibClient.class);
 		MinecraftForge.EVENT_BUS.register(PromptClientHandler.class);
 		MinecraftForge.EVENT_BUS.register(EntityRenderCheck.class);
+		MinecraftForge.EVENT_BUS.register(SmoothTeleport.class);
+		MinecraftForge.EVENT_BUS.register(LockMovement.class);
 
 		modBus.register(ScarletLibClient.Keybinds.class);
 	}

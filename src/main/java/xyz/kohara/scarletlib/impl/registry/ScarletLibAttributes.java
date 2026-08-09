@@ -1,12 +1,8 @@
 package xyz.kohara.scarletlib.impl.registry;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,12 +21,12 @@ public class ScarletLibAttributes {
 			() -> new RangedAttribute("generic.damage_reduction", 1d, -2048d, 2048d).setSyncable(true)
 	);
 
-//	public static final RegistryObject<Attribute> EXTRA_JUMPS = ATTRIBUTES.register(
+//	public static final RegistryObject<Attribute> EXTRA_JUMPS = ATTRIBUTES.init(
 //			"extra_jumps",
 //			() -> new RangedAttribute("player.extra_jumps", 0d, 0, 2048d).setSyncable(true)
 //	);
 //
-//	public static final RegistryObject<Attribute> EXTRA_JUMPS_STRENGTH = ATTRIBUTES.register(
+//	public static final RegistryObject<Attribute> EXTRA_JUMPS_STRENGTH = ATTRIBUTES.init(
 //			"extra_jumps_strength",
 //			() -> new RangedAttribute("player.extra_jumps_strength", 1d, -2048, 2048d).setSyncable(true)
 //	);

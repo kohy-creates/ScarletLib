@@ -13,7 +13,8 @@ import xyz.kohara.scarletlib.api.dash.DashTickContext;
 import xyz.kohara.scarletlib.impl.mixin.EntityAccessor;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.AddEntityParticleEmitterS2CPacket;
-import xyz.kohara.scarletlib.impl.network.packet.EntityRenderPacket;
+import xyz.kohara.scarletlib.impl.network.packet.EntityRenderS2CPacket;
+import xyz.kohara.scarletlib.impl.network.packet.SmoothTeleportS2CPacket;
 import xyz.kohara.scarletlib.impl.prompt.ServerProximityPromptRegistry;
 
 import java.util.HashSet;
@@ -65,14 +66,14 @@ public class EntityUtil {
 	 * Pretty much just makes it not render at all on the clients.
 	 */
 	public static void makeInvisible(LivingEntity entity) {
-		ScarletLibPackets.INSTANCE.sendToAllPlayers(new EntityRenderPacket(entity, true));
+		ScarletLibPackets.INSTANCE.sendToAllPlayers(new EntityRenderS2CPacket(entity, true));
 	}
 
 	/**
 	 * Makes the entity visible again when made invisible with the {@link #makeInvisible(LivingEntity)} method.
 	 */
 	public static void makeVisible(LivingEntity entity) {
-		ScarletLibPackets.INSTANCE.sendToAllPlayers(new EntityRenderPacket(entity, false));
+		ScarletLibPackets.INSTANCE.sendToAllPlayers(new EntityRenderS2CPacket(entity, false));
 	}
 
 	public static void performDash(LivingEntity entity, Dash dash) {
@@ -184,5 +185,11 @@ public class EntityUtil {
 		if (dash.shouldDisableGravity()) entity.setNoGravity(false);
 		if (wasWallHit && dash.getOnWallHit() != null) dash.getOnWallHit().accept(entity);
 		if (dash.getOnEnd() != null) dash.getOnEnd().accept(entity);
+	}
+
+	public static void smoothTeleport(Entity entity, Vec3 newLocation, int duration) {
+		var oldPos = entity.position();
+		entity.teleportTo(newLocation.x, newLocation.y, newLocation.z);
+		ScarletLibPackets.INSTANCE.sendToTracking(new SmoothTeleportS2CPacket(entity.getId(), oldPos, entity.position(), duration), entity);
 	}
 }

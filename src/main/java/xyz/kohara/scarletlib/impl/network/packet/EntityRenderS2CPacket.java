@@ -5,17 +5,17 @@ import net.minecraft.world.entity.Entity;
 import xyz.kohara.scarletlib.api.network.ScarletLibBasePacket;
 import xyz.kohara.scarletlib.impl.client.EntityRenderCheck;
 
-public class EntityRenderPacket extends ScarletLibBasePacket {
+public class EntityRenderS2CPacket extends ScarletLibBasePacket {
 
 	private final int entityId;
 	private final boolean shouldHide;
 
-	public EntityRenderPacket(Entity entity, boolean shouldHide) {
+	public EntityRenderS2CPacket(Entity entity, boolean shouldHide) {
 		this.entityId = entity.getId();
 		this.shouldHide = shouldHide;
 	}
 
-	public EntityRenderPacket(FriendlyByteBuf buf) {
+	public EntityRenderS2CPacket(FriendlyByteBuf buf) {
 		this.entityId = buf.readInt();
 		this.shouldHide = buf.readBoolean();
 	}

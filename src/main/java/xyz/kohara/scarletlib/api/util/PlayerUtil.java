@@ -7,8 +7,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.jmx.Server;
 import xyz.kohara.scarletlib.impl.network.ScarletLibPackets;
 import xyz.kohara.scarletlib.impl.network.packet.ShowRainbowActionBarMessageS2CPacket;
+import xyz.kohara.scarletlib.impl.network.packet.prompt.LockMovementS2CPacket;
 
 import java.util.Comparator;
 import java.util.List;
@@ -84,7 +86,17 @@ public class PlayerUtil extends EntityUtil {
 				.orElse(null);
 	}
 
-	public static void performDash(Player player, double distance, boolean invertDirection, boolean isOmnidirectional, boolean ignoreDownwardAngleOnGround) {
+	/**
+	 * Locks player's movement, making them unable to do anything other than jump.
+	 */
+	public static void lockMovement(ServerPlayer player) {
+		ScarletLibPackets.INSTANCE.sendToPlayer(new LockMovementS2CPacket(true), player);
+	}
 
+	/**
+	 * Unlocks player movement if locked by {@link #lockMovement(ServerPlayer)}.
+	 */
+	public static void unlockMovement(ServerPlayer player) {
+		ScarletLibPackets.INSTANCE.sendToPlayer(new LockMovementS2CPacket(false), player);
 	}
 }
